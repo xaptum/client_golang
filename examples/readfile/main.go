@@ -49,7 +49,7 @@ var (
 			Help:       "Xaptum connection duration distributions.",
 			Objectives: map[float64]float64{0.5: 0.05, 0.9: 0.01, 0.99: 0.001},
 		},
-		[]string{"service"},
+		[]string{"service", "network", "env"},
 	)
 	// The same as above, but now as a histogram, and only for the normal
 	// distribution. The buckets are targeted to the parameters of the
@@ -102,7 +102,10 @@ func main() {
     		    f, _ := strconv.ParseFloat(eachline, 64)
 			    //v := rand.Float64() * *uniformDomain
 			    fmt.Printf("%T, %v\n", f, f)
-			    xaptumConnectionDurations.WithLabelValues("xmb").Observe(f)
+			    xaptumConnectionDurations.WithLabelValues("xmb", "2607:8f80:8100:aaaa::/64", "dev").Observe(f)
+			    xaptumConnectionDurations.WithLabelValues("xmb", "2607:8f80:8100:1234::/64", "dev").Observe(f)
+			    xaptumConnectionDurations.WithLabelValues("xmb", "2607:8f80:80c0:bbbb::/64", "prod").Observe(f)
+			    xaptumConnectionDurations.WithLabelValues("xmb", "2607:8f80:80c0:789a::/64", "prod").Observe(f)
 			    time.Sleep(time.Duration(100*oscillationFactor()) * time.Millisecond)
 		    }
 
